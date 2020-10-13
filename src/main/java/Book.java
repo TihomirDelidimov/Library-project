@@ -142,4 +142,17 @@ public abstract class Book {
         }
         return false;
     }
+
+    /**
+     * This method checks if a given title match a book's title
+     *
+     * @param title - this parameter is the title, which will be checked
+     * @return - this method return true if the titles match, otherwise return false
+     */
+    public boolean checkTitle(String title) {
+        if(title!=null && title.isEmpty()) {
+            return title.equals(this.title);
+        }
+        return false;
+    }
 }

@@ -18,6 +18,7 @@ public class BookRepository {
 
     /**
      * This method is used to add a new book to the repository
+     *
      * @param book
      */
     public void addBook(Book book) {
@@ -98,4 +99,27 @@ public class BookRepository {
         }
         return map;
     }
+
+    /**
+     * This method is used to search for a books by the title
+     *
+     * @param title - this parameter is the title, which is the criteria for the result
+     * @return - this method return a list of books if there are books in the repository, otherwise
+     * the method returns an empty list. If the title is invalid string, the method will return null value
+     */
+    public List<Book> searchBooksByTitle(String title) {
+        if (title == null || title.isEmpty()) {
+            return null;
+        }
+
+        List<Book> booksResult = new ArrayList<>();
+        for (Book book : books) {
+            if (book.checkTitle(title)) {
+                booksResult.add(book);
+            }
+        }
+        return booksResult;
+    }
+
+    
 }
