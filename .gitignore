@@ -1,0 +1,9 @@
+.idea/
+out/
+**/target/
+target/classes/
+target/generated-sources/annotations/
+**/LibraryProject.iml
+*.class
+src/test/
+src/resources/
