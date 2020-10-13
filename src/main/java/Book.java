@@ -155,4 +155,17 @@ public abstract class Book {
         }
         return false;
     }
+
+    /**
+     * This method checks if a given genre match a book's genre
+     *
+     * @param genre - this parameter is the genre, which will be checked
+     * @return - this method return true if the genres match, otherwise return false
+     */
+    public boolean checkGenre(BookGenre genre) {
+        if(genre != null) {
+            return genre == this.genre;
+        }
+        return false;
+    }
 }

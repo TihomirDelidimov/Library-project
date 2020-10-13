@@ -1,3 +1,5 @@
+import enumerations.BookGenre;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -121,5 +123,25 @@ public class BookRepository {
         return booksResult;
     }
 
-    
+
+    /**
+     * This method is used to search for a books by the genre
+     *
+     * @param genre - this parameter is the genre, which is the criteria for the result
+     * @return - this method return a list of books if there books in the repository, otherwise
+     * the method returns an empty list. If the genre is invalid, the method will return null value
+     */
+    public List<Book> searchBooksByGenre(BookGenre genre) {
+        if (genre == null) {
+            return null;
+        }
+
+        List<Book> bookResult = new ArrayList<>();
+        for (Book book : books) {
+            if (book.checkGenre(genre)) {
+                bookResult.add(book);
+            }
+        }
+        return bookResult;
+    }
 }
