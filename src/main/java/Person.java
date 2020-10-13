@@ -2,6 +2,7 @@
  * This class represents a person with common properties, which purpose is to be inherited by multiple classes
  */
 public abstract class Person {
+
     protected String firstName;
     protected String lastname;
 

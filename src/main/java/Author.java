@@ -1,10 +1,10 @@
 import java.time.LocalDate;
-import java.util.Date;
 
 /**
  * This class represents an author
  */
 public class Author extends Person {
+
     private LocalDate dateOfBirth;
     private LocalDate dateOfDeath;
 
@@ -18,10 +18,11 @@ public class Author extends Person {
 
     /**
      * This method is used to set the date of death for the author
+     *
      * @param dateOfDeath - this parameter is the date of death
      */
     public void setDateOfDeath(LocalDate dateOfDeath) {
-        if (dateOfDeath.isAfter(dateOfBirth)) {
+        if (dateOfDeath != null || dateOfDeath.isAfter(dateOfBirth)) {
             this.dateOfDeath = dateOfDeath;
         } else {
             throw new IllegalArgumentException("Date of death cannot be before date of birth!!");

@@ -8,6 +8,7 @@ import java.util.Map;
  * check if a book exist, to return a book by ISBN and to extract information about user's waiting book list
  */
 public class BookRepository {
+
     List<Book> books = new ArrayList<>();
 
     @Override

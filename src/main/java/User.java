@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class User extends Person {
+
     private String username;
     private String password;
     private Gender gender;

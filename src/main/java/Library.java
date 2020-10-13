@@ -90,8 +90,6 @@ public class Library {
                 UserRecord userBorrowRequest =
                         new UserRecord(user.getUsername(), paperBook, USER_DAYS_TO_BORROW);
                 borrowRequestsRecords.add(userBorrowRequest);
-                System.out.println("rrr");
-                System.out.println(borrowRequestsRecords.get(0));
                 paperBook.decrementQuantity();
             } else {
                 PaperBook book = (PaperBook) bookRepository.getBookByISBN(isbn);
@@ -103,7 +101,8 @@ public class Library {
 
     /**
      * This method is used when a user has come to the library and borrowed the book, which he has requested.
-     * The book and the user will be removed from the borrowRequestsRecords and put into the borrowedBooksRecords
+     * The book and the user will be removed from the borrowRequestsRecords and put into the borrowedBooksRecords.
+     * The method also updates the user history.
      *
      * @param username - this parameter is the username of the user, which has borrowed the book
      * @param isbn     - this parameter is the isbn of the book, which was borrowed by the user
@@ -123,6 +122,7 @@ public class Library {
             UserRecord borrowedBookRecord =
                     new UserRecord(username, paperBook, USER_DAYS_TO_RETURN_THE_BOOK);
             borrowedBooksRecords.add(borrowedBookRecord);
+            userRepository.saveUserHistory(username,paperBook);
         }
     }
 

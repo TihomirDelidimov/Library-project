@@ -8,6 +8,7 @@ import enumerations.Tag;
  * This class represent a book with common properties, which purpose is to be inherited by multiple classes
  */
 public abstract class Book {
+
     protected String title;
     protected String summary;
     protected String isbn;
