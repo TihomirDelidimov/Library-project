@@ -9,12 +9,15 @@ public class UserRecord {
     private PaperBook paperBook;
     private LocalDate dateOfAction;
     private LocalDate dueDate;
+    private LocalDate maximumPostponementDate;
+    private final int MAXIMUM_POSTPONEMENT_DAYS = 14;
 
     public UserRecord(String username, PaperBook paperBook, int periodInDays) {
         this.username = username;
         this.paperBook = paperBook;
         this.dateOfAction = LocalDate.now();
-        this.dueDate = LocalDate.now().plusDays(periodInDays);
+        dueDate = LocalDate.now().plusDays(periodInDays);
+        maximumPostponementDate = dueDate.plusDays(MAXIMUM_POSTPONEMENT_DAYS);
     }
 
     @Override
@@ -53,5 +56,22 @@ public class UserRecord {
             return false;
         }
         return paperBook.checkISBN(isbn);
+    }
+
+    /**
+     * This method is used only when UserRecord is used for borrowed books
+     * @return - this method return true if the method has
+     */
+    public boolean createPostponement(int periodInDays) {
+        if(periodInDays > 14) {
+            return false;
+        }
+
+        LocalDate postponementDate = dueDate.plusDays(periodInDays);
+        if(postponementDate.isBefore(maximumPostponementDate)) {
+            dueDate = postponementDate;
+            return true;
+        }
+        return false;
     }
 }

@@ -29,6 +29,5 @@ public class Application {
         library.addBook(leviathanWakes);
         UI ui = new UI(library);
         ui.runNonLoginUI();
-
     }
 }

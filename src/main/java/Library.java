@@ -158,6 +158,24 @@ public class Library {
     }
 
     /**
+     * This method is used to create a postponement for specific user, which
+     * @param username - this parameter is the username of the user, on which a postponement for the specific book will be created
+     * @param isbn - this parameter is the isbn of the the book, which the user has borrowed
+     * @param periodInDays - this parameter is the period of time, which user wants to make postponement for a book
+     * @return - this method return true if a successful postponement is created, otherwise return false
+     */
+    public boolean createdBookPostponement(String username, String isbn, int periodInDays) {
+        if(bookRepository.checkPaperBookExistence(isbn)) {
+            for(UserRecord userRecord : borrowedBooksRecords) {
+                if(userRecord.checkRecordByUsername(username) && userRecord.checkRecordByISBN(isbn)) {
+                    return userRecord.createPostponement(periodInDays);
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
      * This method is used when a user wants to see his waiting list. It will return map, which represents
      * the book he is waiting to borrow and his number in the queue.
      * @param user - this parameter is the user for whom the information will be extracted
