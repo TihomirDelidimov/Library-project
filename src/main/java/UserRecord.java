@@ -60,16 +60,17 @@ public class UserRecord {
 
     /**
      * This method is used only when UserRecord is used for borrowed books
-     * @return - this method return true if the method has
+     * @return - this method return true if the method has created a new due date based on the parameter, otherwise
+     * return false
      */
     public boolean createPostponement(int periodInDays) {
         if(periodInDays > 14) {
             return false;
         }
 
-        LocalDate postponementDate = dueDate.plusDays(periodInDays);
-        if(postponementDate.isBefore(maximumPostponementDate)) {
-            dueDate = postponementDate;
+        LocalDate requestedPostponementDate = dueDate.plusDays(periodInDays);
+        if(requestedPostponementDate.isBefore(maximumPostponementDate)) {
+            dueDate = requestedPostponementDate;
             return true;
         }
         return false;
