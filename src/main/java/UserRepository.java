@@ -2,7 +2,11 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class is used to store a list of users and execute common operations on these users
+ */
 public class UserRepository {
+
     private List<User> users = new ArrayList<>();
 
     /**
@@ -12,12 +16,7 @@ public class UserRepository {
      * @param newUser - this parameter is a new potential user to the repository
      */
     public void addUser(User newUser) {
-        if (newUser != null) {
-            for (User user : users) {
-                if (user.checkUsername(newUser)) {
-                    throw new IllegalArgumentException("Username already exist in the repository!");
-                }
-            }
+        if (newUser != null && getUserByUsername(newUser.getUsername()) == null) {
             users.add(newUser);
         }
     }
@@ -32,7 +31,7 @@ public class UserRepository {
      */
     public boolean verifyUserAccount(String username, String password) {
         for (User user : users) {
-            if (user.checkUsername(username) && user.checkPassword(password)) {
+            if (user.isUsernameEqual(username) && user.checkPassword(password)) {
                 return true;
             }
         }
@@ -48,7 +47,7 @@ public class UserRepository {
      */
     public User getUserByUsername(String username) {
         for (User user : users) {
-            if (user.checkUsername(username)) {
+            if (user.isUsernameEqual(username)) {
                 return user;
             }
         }
@@ -57,14 +56,12 @@ public class UserRepository {
 
     /**
      * This method is used to save a history to a user about borrowed book, read book or downloaded book
+     *
      * @param username - this parameter is the username of the user, which history will be updated
-     * @param book - this parameter is the book
+     * @param book     - this parameter is the book
      */
-    public void saveUserHistory(String username, Book book) {
-        for (User user : users) {
-            if(user.checkUsername(username)) {
-                user.updateHistory(book, LocalDate.now());
-            }
-        }
+    public void addBookToUserHistory(String username, Book book) {
+        getUserByUsername(username).addBookToHistory(book, LocalDate.now());
     }
+
 }

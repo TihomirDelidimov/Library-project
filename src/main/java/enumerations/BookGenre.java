@@ -1,7 +1,7 @@
 package enumerations;
 
 /**
- * This class represents the books genres
+ * This enumeration is representation of book genres
  */
 public enum BookGenre {
     CRIME,

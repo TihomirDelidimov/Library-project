@@ -1,5 +1,12 @@
+import exceptions.MissingBookReferenceException;
+import exceptions.MissingLocalDateReferenceException;
+
 import java.time.LocalDate;
 
+/**
+ * This class is represents a single unit of a user history, which means an instance of this class will contain
+ * information about a book and date.
+ */
 public class UserHistory {
 
     private LocalDate borrowDate;
@@ -14,13 +21,13 @@ public class UserHistory {
 
     private void validateBook(Book book) {
         if(book == null) {
-            throw new NullPointerException("Missing book reference!");
+            throw new MissingBookReferenceException("Missing book reference!");
         }
     }
 
     private void validateDate(LocalDate date) {
         if(date == null) {
-            throw new NullPointerException("Missing borrow date reference!");
+            throw new MissingLocalDateReferenceException("Missing borrow date reference!");
         }
     }
 }

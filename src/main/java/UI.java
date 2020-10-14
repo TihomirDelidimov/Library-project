@@ -1,4 +1,5 @@
 import enumerations.Gender;
+import exceptions.MissingLibraryReferenceException;
 
 import java.util.Scanner;
 
@@ -14,7 +15,7 @@ public class UI {
 
     public UI(Library library) {
         if (library == null) {
-            throw new NullPointerException("Missing library reference!");
+            throw new MissingLibraryReferenceException("Missing library reference!");
         }
         this.library = library;
     }
@@ -44,7 +45,7 @@ public class UI {
             input = consoleInput.nextInt();
             switch (input) {
                 case 1:
-                    System.out.println(library.showBooks());
+                    System.out.println(library.showAllBooks());
                     break;
                 case 2:
                     userRegistration();
@@ -87,7 +88,7 @@ public class UI {
                 case 0:
                     break;
                 case 1:
-                    System.out.println(library.showBooks());
+                    System.out.println(library.showAllBooks());
                     break;
                 case 2:
                     borrowBookRequestDialog();
@@ -118,7 +119,7 @@ public class UI {
         System.out.print("\nEnter isbn of the book: ");
         String isbn = consoleInput.next();
 
-        library.userReturnedBook(username, isbn);
+        library.returnBook(username, isbn);
     }
 
     private void borrowBookRequestDialog() {
@@ -137,7 +138,7 @@ public class UI {
         String username = consoleInput.next();
         System.out.print("\nEnter ISBN of the book, which the user is borrowing: ");
         String isbn = consoleInput.next();
-        library.userBorrowedBook(username, isbn);
+        library.borrowBook(username, isbn);
     }
 
     /**

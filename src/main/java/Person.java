@@ -1,3 +1,6 @@
+import exceptions.CommonValidationException;
+import static CommonStringValidation.CommonStringValidator.*;
+
 /**
  * This class represents a person with common properties, which purpose is to be inherited by multiple classes
  */
@@ -18,11 +21,11 @@ public abstract class Person {
      * @param lastname - this parameter is the last name of the person
      */
     private void nameValidator(String firstName, String lastname) {
-        if (firstName == null || firstName.isEmpty()) {
-            throw new IllegalArgumentException("Invalid first name!");
+        if (!isStringValid(firstName)) {
+            throw new CommonValidationException("Invalid first name!");
         }
-        if (lastname == null || lastname.isEmpty()) {
-            throw new IllegalArgumentException("Invalid last name!");
+        if (!isStringValid(lastname)) {
+            throw new CommonValidationException("Invalid last name!");
         }
     }
 

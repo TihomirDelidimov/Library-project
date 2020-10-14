@@ -1,5 +1,6 @@
 import enumerations.BookGenre;
 import enumerations.Tag;
+import exceptions.CommonValidationException;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -10,9 +11,11 @@ import java.util.Queue;
  * of the users that has requested that book, but at the moment there was no available copy.
  */
 public class PaperBook extends Book {
+
+    private static final int QUEUE_HEAD = 0;
+    private LinkedList<User> waitingUsers = new LinkedList<>();
     private int totalQuantity;
     private int availableQuantity;
-    private Queue<User> waitingUsers = new LinkedList<>();
 
     public PaperBook(String title, String summary, String isbn, List<Author> authors, List<Tag> tags, BookGenre genre,
                      int quantity) {
@@ -28,7 +31,7 @@ public class PaperBook extends Book {
      */
     private void validateQuantity(int quantity) {
         if (quantity <= 0) {
-            throw new IllegalArgumentException("Paper book quantity must be at least 1!");
+            throw new CommonValidationException("Paper book quantity must be at least 1!");
         }
     }
 
@@ -78,7 +81,7 @@ public class PaperBook extends Book {
      */
     public User pullUserFromQueue() {
         if(waitingUsers.size() > 0) {
-            return waitingUsers.remove();
+            return waitingUsers.remove(QUEUE_HEAD);
         }
         return null;
     }
@@ -90,14 +93,12 @@ public class PaperBook extends Book {
      */
     public int getUserQueuePosition(User user) {
         if (user != null) {
-            int counter = 0;
-            for (User userToFind : waitingUsers) {
-                if (user.checkUsername(userToFind.getUsername())) {
-                    return counter + 1;
-                }
-                counter++;
-            }
+            return waitingUsers.indexOf(user);
         }
         return -1;
+    }
+
+    public int getQueueSize() {
+        return waitingUsers.size();
     }
 }

@@ -1,7 +1,7 @@
 package enumerations;
 
 /**
- * This enumeration represents a tags, which can be associated to books
+ * This enumeration represents a tag, which can be associated to books
  */
 public enum Tag {
     MYSTERY,

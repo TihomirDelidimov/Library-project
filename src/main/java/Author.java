@@ -1,3 +1,5 @@
+import exceptions.CommonValidationException;
+
 import java.time.LocalDate;
 
 /**
@@ -11,7 +13,7 @@ public class Author extends Person {
     public Author(String firstName, String lastName, LocalDate dateOfBirth) {
         super(firstName, lastName);
         if (dateOfBirth == null) {
-            throw new IllegalArgumentException("Invalid date of birth!");
+            throw new CommonValidationException("Invalid date of birth!");
         }
         this.dateOfBirth = dateOfBirth;
     }
@@ -25,7 +27,7 @@ public class Author extends Person {
         if (dateOfDeath != null || dateOfDeath.isAfter(dateOfBirth)) {
             this.dateOfDeath = dateOfDeath;
         } else {
-            throw new IllegalArgumentException("Date of death cannot be before date of birth!!");
+            throw new CommonValidationException("Date of death cannot be before date of birth!!");
         }
     }
 }
