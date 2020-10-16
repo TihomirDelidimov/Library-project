@@ -3,6 +3,7 @@ import enumerations.Tag;
 import exceptions.CommonValidationException;
 import interfaces.Downloadable;
 import interfaces.Readable;
+
 import static CommonStringValidation.CommonStringValidator.*;
 
 import java.util.List;
@@ -25,13 +26,13 @@ public class EBook extends Book implements Readable, Downloadable {
     }
 
     private void validateLinkToRead(String link) {
-        if(!isStringValid(link)) {
+        if (!isStringValid(link)) {
             throw new CommonValidationException("Invalid online link to read!");
         }
     }
 
     private void validateLinkToDownload(String link) {
-        if(!isStringValid(link)) {
+        if (!isStringValid(link)) {
             throw new CommonValidationException("Invalid online link to download!");
         }
     }

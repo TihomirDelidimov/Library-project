@@ -20,13 +20,13 @@ public class UserHistory {
     }
 
     private void validateBook(Book book) {
-        if(book == null) {
+        if (book == null) {
             throw new MissingBookReferenceException("Missing book reference!");
         }
     }
 
     private void validateDate(LocalDate date) {
-        if(date == null) {
+        if (date == null) {
             throw new MissingLocalDateReferenceException("Missing borrow date reference!");
         }
     }

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import exceptions.CommonValidationException;
+import exceptions.UserDoesNotComplyForEUGDPRException;
 
 import static CommonStringValidation.CommonStringValidator.*;
 
@@ -44,10 +45,17 @@ public class User extends Person {
         validateAddress(address);
         validateEmail(email);
         validateAge(age);
+        validateGDPR(gdprConsent);
     }
 
     public String getUsername() {
         return username;
+    }
+
+    private void validateGDPR(boolean isGDPRConsent) {
+        if (!isGDPRConsent) {
+            throw new UserDoesNotComplyForEUGDPRException("Cannot create a new user, which does not comply with EU GDPR!");
+        }
     }
 
     private void validateUsername(String username) {

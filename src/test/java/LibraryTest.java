@@ -126,7 +126,6 @@ public class LibraryTest {
         assertNull(searchResult);
     }
 
-
     @Test
     public void searchForBooksByGenre_EmptyName_ShouldReturnNullValue() {
         //when
@@ -216,7 +215,7 @@ public class LibraryTest {
     }
 
     @Test
-    public void addingAReadOnlyEBook() {
+    public void addingAReadOnlyEBook_IsTheBookAdded_TheBookIsAdded() {
         //given
         int libraryBookCountBeforeAdd = library.getLibraryBookCount();
         Author neilGaiman = new Author("Neil", "Gaiman", LocalDate.of(1960, 10, 10));
@@ -281,7 +280,7 @@ public class LibraryTest {
     }
 
     @Test
-    public void addingAnEBook() {
+    public void addingAnEBook_IsTheBookAdded_TheBookIsAdded() {
         //given
         int libraryBookCountBeforeAdd = library.getLibraryBookCount();
         Author brianBendis = new Author("Brian", "Bendis", LocalDate.of(1967, 8, 18));
@@ -368,7 +367,7 @@ public class LibraryTest {
         //then
         assertEquals(expectedReadLink, actualReadLink);
     }
-    
+
     @Test
     public void getReadLinkForABook_CanTheUserGetReadLinkForPaperBook_ShouldThrowException() {
         //given
@@ -883,7 +882,7 @@ public class LibraryTest {
     }
 
     @Test
-    public void postponeBook_CanAUserPostooneMoreThanTwoWeeks_ShouldNotBeAble() {
+    public void postponeBook_CanAUserPostponeMoreThanTwoWeeks_ShouldNotBeAble() {
         //given
         library.borrowBookRequest("Ivan123", "978-0-9706726-8-1");
         library.borrowBook("Ivan123", "978-0-9706726-8-1");

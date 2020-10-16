@@ -4,6 +4,7 @@ import exceptions.BookNotFoundException;
 import exceptions.InvalidISBNException;
 
 import static CommonStringValidation.CommonStringValidator.*;
+
 import java.util.*;
 
 /**
@@ -21,12 +22,13 @@ public class BookRepository {
 
     /**
      * This method is used to create a new paper book
-     * @param title - this parameter is the title of the book
-     * @param summary - this parameter is the summary of the book
-     * @param isbn - this parameter is the ISBN of the book
-     * @param authors - this parameter is the authors of the book
-     * @param tags - this parameter is the tags of the book
-     * @param genre - this parameter is the genre of the book
+     *
+     * @param title    - this parameter is the title of the book
+     * @param summary  - this parameter is the summary of the book
+     * @param isbn     - this parameter is the ISBN of the book
+     * @param authors  - this parameter is the authors of the book
+     * @param tags     - this parameter is the tags of the book
+     * @param genre    - this parameter is the genre of the book
      * @param quantity - this parameter is the quantity of the book
      * @return - this method return a reference to the new paper book if it's created, otherwise return null
      */

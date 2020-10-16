@@ -27,6 +27,7 @@ public class PaperBook extends Book {
 
     /**
      * This method validates the quantity of the book when a new book is created
+     *
      * @param quantity - this parameter is the quantity
      */
     private void validateQuantity(int quantity) {
@@ -65,6 +66,7 @@ public class PaperBook extends Book {
     /**
      * This method is used when a user has requested a book, but at the moment of the request there wasn't available
      * copy for this book and the user need to wait for a copy of the book to become available.
+     *
      * @param user - this parameter is the user, which will wait for the book to become available
      */
     public void addUserToTheQueue(User user) {
@@ -76,11 +78,12 @@ public class PaperBook extends Book {
     /**
      * This method is used when a user has returned a book to the library and that means a copy of the book
      * is available. The method extracts the first element of the waiting queue and returns it.
+     *
      * @return - this method return the first user in the queue, which has requested this book, if there is no
      * waiting queue for this book the method return null
      */
     public User pullUserFromQueue() {
-        if(waitingUsers.size() > 0) {
+        if (waitingUsers.size() > 0) {
             return waitingUsers.remove(QUEUE_HEAD);
         }
         return null;
@@ -88,12 +91,13 @@ public class PaperBook extends Book {
 
     /**
      * This method returns the queue position of the user
+     *
      * @param user - this parameter is the user
      * @return - this method return positive integer value if the user if found in the queue, otherwise -1 is returned
      */
     public int getUserQueuePosition(User user) {
         if (user != null && waitingUsers.contains(user)) {
-            return waitingUsers.indexOf(user)+1;
+            return waitingUsers.indexOf(user) + 1;
         }
         return -1;
     }

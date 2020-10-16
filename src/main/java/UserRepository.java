@@ -14,14 +14,15 @@ public class UserRepository {
     /**
      * This method is used to create a new user in the user repository. It checks if a user with the same username exist, if it does
      * the new user is not created and null value is returned.
-     * @param firstName - this parameter is the first name of the user
-     * @param lastName - this parameter is the last name of the user
-     * @param username - this parameter is the username of the user
-     * @param password - this parameter is the password of the user
-     * @param gender - this parameter is the gender of the user
-     * @param address - this parameter is the address of the user
-     * @param email - this parameter is the email of the user
-     * @param age - this parameter is the age of the user
+     *
+     * @param firstName   - this parameter is the first name of the user
+     * @param lastName    - this parameter is the last name of the user
+     * @param username    - this parameter is the username of the user
+     * @param password    - this parameter is the password of the user
+     * @param gender      - this parameter is the gender of the user
+     * @param address     - this parameter is the address of the user
+     * @param email       - this parameter is the email of the user
+     * @param age         - this parameter is the age of the user
      * @param gdprConsent - this parameter indicates if the user is EU GDPR compliant
      * @return - this method return the reference to the user if the username doesn't exist for another user, otherwise the method will
      * return null value
@@ -41,7 +42,7 @@ public class UserRepository {
      * @param newUser - this parameter is a new potential user to the repository
      */
     public void addUser(User newUser) {
-            users.add(newUser);
+        users.add(newUser);
     }
 
     /**
@@ -86,5 +87,4 @@ public class UserRepository {
     public void addBookToUserHistory(String username, Book book, LocalDate date) {
         getUserByUsername(username).addBookToHistory(book, date);
     }
-
 }

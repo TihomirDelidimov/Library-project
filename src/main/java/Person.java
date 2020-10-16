@@ -1,4 +1,5 @@
 import exceptions.CommonValidationException;
+
 import static CommonStringValidation.CommonStringValidator.*;
 
 /**
@@ -17,8 +18,9 @@ public abstract class Person {
 
     /**
      * This method is used to validate the first name and the last name of the person
+     *
      * @param firstName - this parameter is the first name of the person
-     * @param lastname - this parameter is the last name of the person
+     * @param lastname  - this parameter is the last name of the person
      */
     private void nameValidator(String firstName, String lastname) {
         if (!isStringValid(firstName)) {
