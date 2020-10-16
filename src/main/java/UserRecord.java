@@ -1,4 +1,4 @@
-import java.awt.print.Paper;
+
 import java.time.LocalDate;
 import static java.time.LocalDate.*;
 import static CommonStringValidation.CommonStringValidator.*;
@@ -9,17 +9,17 @@ import static CommonStringValidation.CommonStringValidator.*;
 public class UserRecord {
 
     private final static int MAXIMUM_POSTPONEMENT_DAYS = 14;
-    private String username;
-    private PaperBook paperBook;
-    private LocalDate dateOfAction;
+    private final String username;
+    private final PaperBook paperBook;
+    private final LocalDate dateOfRecord;
     private LocalDate dueDate;
-    private LocalDate maximumPostponementDate;
+    private final LocalDate maximumPostponementDate;
 
-    public UserRecord(String username, PaperBook paperBook, int periodInDays) {
+    public UserRecord(String username, PaperBook paperBook, LocalDate dateOfRecord, LocalDate dueDate) {
         this.username = username;
         this.paperBook = paperBook;
-        this.dateOfAction = now();
-        dueDate = now().plusDays(periodInDays);
+        this.dateOfRecord = dateOfRecord;
+        this.dueDate = dueDate;
         maximumPostponementDate = dueDate.plusDays(MAXIMUM_POSTPONEMENT_DAYS);
     }
 
@@ -30,8 +30,8 @@ public class UserRecord {
                 .append(username)
                 .append("\nPaper book: ")
                 .append(paperBook)
-                .append("\nDate of action: ")
-                .append(dateOfAction)
+                .append("\nDate of record   : ")
+                .append(dateOfRecord)
                 .append("\nDue date: ")
                 .append(dueDate)
                 .toString();
@@ -47,6 +47,10 @@ public class UserRecord {
 
     public String getUsername() {
         return username;
+    }
+
+    public boolean isUserAlreadyRequestedTheBook(String username, PaperBook paperBook) {
+        return username.equals(this.username) && paperBook.equals(this.paperBook);
     }
 
     /**

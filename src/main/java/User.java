@@ -105,7 +105,7 @@ public class User extends Person {
      * @param password - this parameter is the user's password
      * @return - this method return true if the supplied password match the user's password, otherwise return false
      */
-    public boolean checkPassword(String password) {
+    public boolean isPasswordEqual(String password) {
         if (isStringValid(password)) {
             return password.equals(this.password);
         }

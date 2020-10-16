@@ -9,14 +9,14 @@ import java.time.LocalDate;
  */
 public class UserHistory {
 
-    private LocalDate borrowDate;
+    private LocalDate date;
     private Book book;
 
-    public UserHistory(Book book, LocalDate borrowDate) {
+    public UserHistory(Book book, LocalDate date) {
         validateBook(book);
-        validateDate(borrowDate);
+        validateDate(date);
         this.book = book;
-        this.borrowDate = borrowDate;
+        this.date = date;
     }
 
     private void validateBook(Book book) {

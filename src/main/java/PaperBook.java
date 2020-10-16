@@ -92,8 +92,8 @@ public class PaperBook extends Book {
      * @return - this method return positive integer value if the user if found in the queue, otherwise -1 is returned
      */
     public int getUserQueuePosition(User user) {
-        if (user != null) {
-            return waitingUsers.indexOf(user);
+        if (user != null && waitingUsers.contains(user)) {
+            return waitingUsers.indexOf(user)+1;
         }
         return -1;
     }

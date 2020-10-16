@@ -12,10 +12,31 @@ public class Author extends Person {
 
     public Author(String firstName, String lastName, LocalDate dateOfBirth) {
         super(firstName, lastName);
-        if (dateOfBirth == null) {
-            throw new CommonValidationException("Invalid date of birth!");
-        }
+        validateDateOfBirth(dateOfBirth);
         this.dateOfBirth = dateOfBirth;
+    }
+
+    public Author(String firstName,String lastName, LocalDate dateOfBirth, LocalDate dateOfDeath) {
+        super(firstName,lastName);
+        validateDateOfBirth(dateOfBirth);
+        setDateOfDeath(dateOfDeath);
+        this.dateOfBirth = dateOfBirth;
+        this.dateOfDeath = dateOfDeath;
+    }
+
+    private void validateDateOfBirth(LocalDate dateOfBirth) {
+        if (dateOfBirth == null) {
+            throw new CommonValidationException("Missing date of birth!");
+        }
+    }
+
+    private void validateDateOfDeath(LocalDate dateOfDeath) {
+        if (dateOfDeath == null) {
+            throw new CommonValidationException("Missing date of death");
+        }
+        else if(dateOfDeath.isBefore(dateOfBirth)) {
+            throw new CommonValidationException("Date of death cannot be before date of birth!!");
+        }
     }
 
     /**
@@ -24,7 +45,7 @@ public class Author extends Person {
      * @param dateOfDeath - this parameter is the date of death
      */
     public void setDateOfDeath(LocalDate dateOfDeath) {
-        if (dateOfDeath != null || dateOfDeath.isAfter(dateOfBirth)) {
+        if (dateOfDeath != null && dateOfDeath.isAfter(dateOfBirth)) {
             this.dateOfDeath = dateOfDeath;
         } else {
             throw new CommonValidationException("Date of death cannot be before date of birth!!");

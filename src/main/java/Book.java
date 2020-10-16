@@ -4,6 +4,7 @@ import java.util.List;
 import enumerations.BookGenre;
 import enumerations.Tag;
 import exceptions.CommonValidationException;
+import exceptions.InvalidISBNException;
 
 import static CommonStringValidation.CommonStringValidator.*;
 
@@ -78,6 +79,7 @@ public abstract class Book {
 
     /**
      * This method is used to check if an author with the supplied full name exist for the current book
+     *
      * @param fullName - this parameter is the author's full name
      * @return - this method return true if it finds an author for the book with the supplied full name, otherwise return false
      */
@@ -90,9 +92,24 @@ public abstract class Book {
         return false;
     }
 
-    public List<Author> getAuthors() {
-        return authors;
+    public boolean isThereAnAuthorWithFirstName(String firstName) {
+        for (Author author : authors) {
+            if (author.getFirstName().equalsIgnoreCase(firstName)) {
+                return true;
+            }
+        }
+        return false;
     }
+
+    public boolean isThereAnAuthorWithLastName(String lastName) {
+        for (Author author : authors) {
+            if (author.getLastName().equalsIgnoreCase(lastName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     /**
      * This method validates the ISBN of the book. The method checks if the ISBN is consisting of 13 digits, if that is true
@@ -102,12 +119,12 @@ public abstract class Book {
      */
     private void validateISBN(String isbn) {
         if (isbn == null) {
-            throw new CommonValidationException("Missing ISBN!");
+            throw new InvalidISBNException("Missing ISBN!");
         }
         isbn = isbn.replaceAll("-", "");
 
         if (isbn.length() != 13) {
-            throw new CommonValidationException("Incorrect ISBN!");
+            throw new InvalidISBNException("Incorrect ISBN!");
         }
 
         try {
@@ -123,10 +140,10 @@ public abstract class Book {
             }
 
             if (checkSum != Integer.parseInt(isbn.substring(12))) {
-                throw new CommonValidationException("Incorrect ISBN");
+                throw new InvalidISBNException("Incorrect ISBN");
             }
         } catch (NumberFormatException nfe) {
-            throw new CommonValidationException("The ISBN consists of non-numeric characters!");
+            throw new InvalidISBNException("The ISBN consists of non-numeric characters!");
         }
     }
 

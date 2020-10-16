@@ -29,6 +29,14 @@ public abstract class Person {
         }
     }
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastname;
+    }
+
     public String getFullName() {
         return firstName + " " + lastname;
     }

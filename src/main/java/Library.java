@@ -1,3 +1,10 @@
+import enumerations.BookGenre;
+import enumerations.Gender;
+import enumerations.Tag;
+import exceptions.*;
+import interfaces.Downloadable;
+import interfaces.Readable;
+
 import java.time.LocalDate;
 
 import static java.time.LocalDate.*;
@@ -23,36 +30,55 @@ public class Library {
     private LocalDate currentDate = now();
 
     /**
-     * This method is used to add a new user to the library and more specifically to the user repository
+     * This method is used to register a new user to the library and more specifically to the user repository
      *
-     * @param user - this parameter is the new user of the library
+     * @param firstName
+     * @param lastName
+     * @param username
+     * @param password
+     * @param gender
+     * @param address
+     * @param email
+     * @param age
+     * @param gdprConsent
      */
-    public void addUser(User user) {
-        if (user != null) {
-            userRepository.addUser(user);
+    public boolean registerUser(String firstName, String lastName, String username, String password, Gender gender,
+                                String address, String email, int age, boolean gdprConsent) {
+        User newUser = userRepository.createUser(firstName, lastName, username, password, gender, address, email, age, gdprConsent);
+        if (newUser != null) {
+            userRepository.addUser(newUser);
+            return true;
         }
+        return false;
     }
 
-    /**
-     * This method is used to add a new book to the library and more specifically to the book repository
-     *
-     * @param book - this parameter is the new book, which will be added to the repository
-     */
-    public void addBook(Book book) {
-        if (book != null) {
-            bookRepository.addBook(book);
+    public boolean addPaperBook(String title, String summary, String isbn, List<Author> authors, List<Tag> tags, BookGenre genre, int quantity) {
+        PaperBook paperBook = bookRepository.createNewPaperBook(title, summary, isbn, authors, tags, genre, quantity);
+        if (paperBook != null) {
+            bookRepository.addBook(paperBook);
+            return true;
         }
+        return false;
     }
 
-    /**
-     * This method is used to show all the books in the library
-     *
-     * @return - this method return the library's books in string format
-     */
-    public String showAllBooks() {
-        return bookRepository.toString()
-                .replace("[", "")
-                .replace("]", "");
+    public boolean addReadOnlyEBook(String title, String summary, String isbn, List<Author> authors, List<Tag> tags,
+                                    BookGenre genre, String linkToRead) {
+        ReadOnlyEBook readOnlyEBook = bookRepository.createNewReadOnlyEBook(title, summary, isbn, authors, tags, genre, linkToRead);
+        if (readOnlyEBook != null) {
+            bookRepository.addBook(readOnlyEBook);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean addEBook(String title, String summary, String isbn, List<Author> authors,
+                            List<Tag> tags, BookGenre genre, String linkToRead, String linkToDownload) {
+        EBook eBook = bookRepository.createNewEBook(title, summary, isbn, authors, tags, genre, linkToRead, linkToDownload);
+        if (eBook != null) {
+            bookRepository.addBook(eBook);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -79,6 +105,17 @@ public class Library {
     }
 
     /**
+     * This method is used to return a book reference by book's ISBN, which is unique.
+     *
+     * @param isbn - this parameter is the book's ISBN
+     * @return - this method return book reference if a book with the suuplied isbn is found in the book repository, otherwise
+     * return null
+     */
+    public Book getBookByISBN(String isbn) {
+        return bookRepository.getBookByISBN(isbn);
+    }
+
+    /**
      * This method is used to create a borrow request for a paper book from the library. First it checks if the paper book exist in the repository
      * based on book's ISBN, after that it checks if the book can be borrowed (if the book is available at the moment). If
      * the book is available at the moment of the current request, the information about the user's borrowing request is stored
@@ -87,32 +124,67 @@ public class Library {
      * is decremented so the next request for borrowing will depend on the book's available quantity.
      * If the paper book is not available at the moment of the request, the user is placed in queue of waiting for the available copy.
      *
-     * @param user - this parameter is the user, which is borrowing the book
-     * @param isbn - this parameter is the ISBN of the book, which might be borrowed
+     * @param username - this parameter is the user, which is borrowing the book
+     * @param isbn     - this parameter is the ISBN of the book, which might be borrowed
      * @return - this method return a message, which context is indication about the output of the method
      */
-    public String borrowBookRequest(User user, String isbn) {
-        if (overdueUsers.contains(user)) {
-            return user.getUsername() + " has overdue books and cannot create new borrow request!";
+    public String borrowBookRequest(String username, String isbn) {
+        User requestOwner = findUserByUsername(username);
+        if (isUserOverdue(requestOwner)) {
+            return username + " has overdue books and cannot create new borrow request!";
         }
         if (!bookRepository.checkPaperBookExistence(isbn)) {
-            return "A paper book with this ISBN: " + isbn + " doesn't exist";
+            throw new InvalidISBNException("There is not paper book with this ISBN: " + isbn + "!");
         }
-
         PaperBook paperBook = (PaperBook) bookRepository.getBookByISBN(isbn);
         if (bookRepository.canTheBookBeBorrowed(isbn)) {
-            if (addNewRequestToTheList(user, paperBook)) {
-                return user.getUsername() + " has 3 days to borrow the book from the library!";
+            if (addNewRequestToTheList(requestOwner, paperBook)) {
+                return username + " has 3 days to borrow the book from the library!";
             } else {
-                return user.getUsername() + " already has a request for that book!";
+                throw new UserAlreadyHasBorrowRequestException("This user: " + username +
+                        " already has a request for a book with this ISBN: " + isbn + "!");
             }
         }
-        paperBook.addUserToTheQueue(user);
+        paperBook.addUserToTheQueue(requestOwner);
         int userQueuePosition = paperBook.getQueueSize();
         LocalDate estimationDate = now().plusDays(userQueuePosition * AVERAGE_BOOK_BORROWED_DAYS_PER_USER);
-        return user.getUsername() + " position in queue for book: " + userQueuePosition
+        return username + " position in queue for book: " + userQueuePosition
                 + ". Estimate time of borrowing: " + estimationDate.toString();
+    }
 
+    /**
+     * This method is used to find a user by the username in the repository
+     *
+     * @param username - this parameter is the username of the user
+     * @return - this method return a reference to the user if found, otherwise null
+     */
+    private User findUserByUsername(String username) {
+        User user = userRepository.getUserByUsername(username);
+        if (user != null) {
+            return user;
+        }
+        throw new UserNotFoundException("The user doesn't exist!");
+    }
+
+    private boolean isUserOverdue(User user) {
+        return overdueUsers.contains(userRepository);
+    }
+
+    /**
+     * This method is used to check is the user already has created a borrow request for that book
+     *
+     * @param username - this parameter is the username of the user
+     * @param isbn     - this parameter is the isbn of the book
+     * @return - this method return true if the user already has a request for that book, otherwise return false
+     */
+    private boolean isUserAlreadyRequestedTheBook(String username, String isbn) {
+        PaperBook paperBook = (PaperBook) bookRepository.getBookByISBN(isbn);
+        for (UserRecord userRecord : borrowRequestRecords) {
+            if (userRecord.isUserAlreadyRequestedTheBook(username, paperBook)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -125,8 +197,8 @@ public class Library {
      */
     private boolean addNewRequestToTheList(User user, PaperBook paperBook) {
         UserRecord userBorrowRequest =
-                new UserRecord(user.getUsername(), paperBook, USER_DAYS_TO_BORROW);
-        if (!borrowRequestRecords.contains(userBorrowRequest)) {
+                new UserRecord(user.getUsername(), paperBook, currentDate, currentDate.plusDays(USER_DAYS_TO_BORROW));
+        if (!isUserAlreadyRequestedTheBook(user.getUsername(), paperBook.getISBN())) {
             borrowRequestRecords.add(userBorrowRequest);
             paperBook.decrementQuantity();
             return true;
@@ -155,9 +227,11 @@ public class Library {
             borrowRequestRecords.remove(recordToDelete);
             PaperBook paperBook = (PaperBook) bookRepository.getBookByISBN(isbn);
             UserRecord borrowedBookRecord =
-                    new UserRecord(username, paperBook, USER_DAYS_TO_RETURN_THE_BOOK);
+                    new UserRecord(username, paperBook, currentDate, currentDate.plusDays(USER_DAYS_TO_RETURN_THE_BOOK));
             borrowedBookRecords.add(borrowedBookRecord);
-            userRepository.addBookToUserHistory(username, paperBook);
+            userRepository.addBookToUserHistory(username, paperBook, currentDate);
+        } else {
+            throw new BorrowRequestDoesNotExistException("Trying to borrow a book without a request!");
         }
     }
 
@@ -184,6 +258,8 @@ public class Library {
             borrowedBookRecords.remove(recordToDelete);
             PaperBook paperBook = (PaperBook) bookRepository.getBookByISBN(isbn);
             createBookRequestForTheNextInQueue(paperBook);
+        } else {
+            throw new ReturningANonBorrowedBookException("A book with ISBN: " + isbn + " is not borrwed!");
         }
     }
 
@@ -196,7 +272,7 @@ public class Library {
     private void createBookRequestForTheNextInQueue(PaperBook paperBook) {
         User nextUser = paperBook.pullUserFromQueue();
         if (nextUser != null) {
-            borrowBookRequest(nextUser, paperBook.getISBN());
+            addNewRequestToTheList(nextUser, paperBook);
         } else {
             paperBook.incrementQuantity();
         }
@@ -211,6 +287,7 @@ public class Library {
      * @return - this method return true if a successful postponement is created, otherwise return false
      */
     public boolean postponeBook(String username, String isbn, int periodInDays) {
+        findUserByUsername(username);
         if (bookRepository.checkPaperBookExistence(isbn)) {
             for (UserRecord userRecord : borrowedBookRecords) {
                 if (userRecord.checkRecordByUsername(username) && userRecord.checkRecordByISBN(isbn)) {
@@ -219,6 +296,42 @@ public class Library {
             }
         }
         return false;
+    }
+
+    /**
+     * This method is used to get a link for a user to read the book
+     *
+     * @param username - this parameter is the username of the user
+     * @param isbn     - this parameter is the book's ISBN
+     * @return - this method return a link where the user can read the book
+     */
+    public String getBookOnlineLinkToRead(String username, String isbn) {
+        Book book = bookRepository.getBookByISBN(isbn);
+        if (book instanceof ReadOnlyEBook || book instanceof EBook) {
+            userRepository.addBookToUserHistory(username, book, currentDate);
+            return ((Readable) book).getReadOnlineLink();
+        } else if (book != null) {
+            throw new TheBookDoesNotHaveReadLink("A book with ISBN: " + isbn + " is not an electronic book!");
+        }
+        return null;
+    }
+
+    /**
+     * This method is usedto get a link for a user to download the book
+     *
+     * @param username - this parameter is the username of the user
+     * @param isbn     - this parameter is the book's ISBN
+     * @return - this method return a link where the user can download the book
+     */
+    public String getBookOnlineLinkToDownload(String username, String isbn) {
+        Book book = bookRepository.getBookByISBN(isbn);
+        if (book instanceof EBook) {
+            userRepository.addBookToUserHistory(username, book, currentDate);
+            return ((Downloadable) book).getDownloadLink();
+        } else if (book != null) {
+            throw new TheBookDoesNotHaveDownloadLink("A book with ISBN: " + isbn + " does not have download link!");
+        }
+        return null;
     }
 
     /**
@@ -231,18 +344,9 @@ public class Library {
      */
     public Map<String, Integer> showUserWaitingList(User user) {
         if (user != null) {
-            return bookRepository.showPositionOfUserInWaitingList(user);
+            return bookRepository.showPositionOfTheUserInAllQueues(user);
         }
         return null;
-    }
-
-    /**
-     * This method is used to show the whole list of borrowed books by users
-     *
-     * @return - this method return the borrowed books list in string format
-     */
-    public String showBorrowedBooks() {
-        return borrowedBookRecords.toString().replace("[", "").replace("]", "");
     }
 
     /**
@@ -250,28 +354,53 @@ public class Library {
      *
      * @return - this method return the borrow request list in string format
      */
-    public String showBookRequests() {
-        return borrowRequestRecords.toString().replace("[", "").replace("]", "");
+    public List<UserRecord> showBookRequests() {
+        return borrowRequestRecords;
     }
 
-    public void getNextDate() {
-        currentDate = currentDate.plusDays(1);
+    public List<UserRecord> showBorrowedBooks() {
+        return borrowedBookRecords;
+    }
+
+    public void incrementCurrentDate(int days) {
+        currentDate = currentDate.plusDays(days);
+        ;
     }
 
     /**
      * This method is used to update the {@link Library#borrowRequestRecords}. It checks the due dates of the
      * list and if the method find that the current date is after the due date of the request, this means
-     * that the request has expired and the request needs to be removed from the list. The method executes
-     * {@link Library#createBookRequestForTheNextInQueue(PaperBook)}, which has the responsibility to
-     * create new borrow request for the next user waiting for the same book as the user from the deleted record.
+     * that the request has expired and the request needs to be removed from the list. After all the records are checked
+     * the expired records are deleted and the queues about the paper book, which has become available are updated
      */
     public void updateBorrowRequestRecords() {
+        List<UserRecord> recordsToRemove = new ArrayList<>();
+        List<PaperBook> paperBookQueueUpdateList = new ArrayList<>();
         for (UserRecord userRecord : borrowRequestRecords) {
             if (currentDate.isAfter(userRecord.getDueDate())) {
-                borrowRequestRecords.remove(userRecord);
+                recordsToRemove.add(userRecord);
                 PaperBook paperBook = userRecord.getPaperBook();
-                createBookRequestForTheNextInQueue(paperBook);
+                if (!paperBookQueueUpdateList.contains(paperBook)) {
+                    paperBookQueueUpdateList.add(paperBook);
+                }
             }
+        }
+        if (recordsToRemove.size() > 0) {
+            borrowRequestRecords.removeAll(recordsToRemove);
+        }
+        if (!paperBookQueueUpdateList.isEmpty()) {
+            updatePaperBooksQueue(paperBookQueueUpdateList);
+        }
+    }
+
+    /**
+     * This method is used to update the queues for the paper books
+     *
+     * @param paperBookQueueUpdateList - this parameter is a list of books, which queues needs to be updated
+     */
+    private void updatePaperBooksQueue(List<PaperBook> paperBookQueueUpdateList) {
+        for (PaperBook paperBook : paperBookQueueUpdateList) {
+            createBookRequestForTheNextInQueue(paperBook);
         }
     }
 
@@ -285,9 +414,36 @@ public class Library {
             if (currentDate.isAfter(userRecord.getDueDate())) {
                 User user = userRepository.getUserByUsername(userRecord.getUsername());
                 overdueUsers.add(user);
-                //todo: maybe rename this method bc it's not good name
-                //todo: create method to check if user has overdue books
             }
         }
+    }
+
+    public List<Book> searchBooksByTitle(String title) {
+        return bookRepository.searchBooksByTitle(title);
+    }
+
+    public List<Book> searchBooksByTags(Tag... tags) {
+        return bookRepository.searchBooksByTags(tags);
+    }
+
+    public List<Book> searchForBooksByAuthorFullName(String authorFullName) {
+        return bookRepository.searchForBooksByAuthorFullName(authorFullName);
+    }
+
+    public List<Book> searchForBooksByAuthorFirstName(String firstName) {
+        return bookRepository.searchForBooksByAuthorFirstName(firstName);
+    }
+
+    public List<Book> searchForBooksByAuthorLastName(String lastName) {
+        return bookRepository.searchForBooksByAuthorLastName(lastName);
+    }
+
+    /**
+     * This method is used to get the book count of the library
+     *
+     * @return - this method returns the book count of the library
+     */
+    public int getLibraryBookCount() {
+        return bookRepository.getBookCount();
     }
 }
