@@ -1,7 +1,6 @@
-package deltasource.eu.libraryproject.Users;
-
-import deltasource.eu.libraryproject.Persons.Gender;
-import deltasource.eu.libraryproject.Persons.Person;
+package deltasource.eu.libraryproject.User;
+import deltasource.eu.libraryproject.Person.Gender;
+import deltasource.eu.libraryproject.Person.Person;
 
 import javax.persistence.*;
 
@@ -27,13 +26,20 @@ public class User extends Person {
     }
 
     public User(String firstName, String lastName, String username, String password, Gender gender,
-                String address, String email, int age, boolean gdprConsent) {
+                String address, String email, int age, boolean isGDPRConsent) {
         super(firstName,lastName,gender);
-
+        this.username = username;
+        this.password = password;
+        this.address = address;
+        this.email = email;
+        this.isGDPRConsent = isGDPRConsent;
     }
 
     public Integer getId() {
         return id;
+    }
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getUsername() {
@@ -44,15 +50,35 @@ public class User extends Person {
         this.username = username;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public String getEmail() {
         return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public boolean isGDPRConsent() {
+        return isGDPRConsent;
+    }
+
+    public void setGDPRConsent(boolean GDPRConsent) {
+        isGDPRConsent = GDPRConsent;
     }
 }

@@ -1,4 +1,4 @@
-package deltasource.eu.libraryproject.Persons;
+package deltasource.eu.libraryproject.Person;
 
 import deltasource.eu.libraryproject.CommonExceptions.CommonValidationException;
 
@@ -25,6 +25,30 @@ public abstract class Person {
         personValidator(firstName,lastName,gender);
         this.firstName = firstName;
         this.lastName = lastName;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
     }
 
     private void personValidator(String firstName, String lastName, Gender gender) {
