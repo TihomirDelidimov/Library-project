@@ -1,4 +1,4 @@
-package deltasource.eu.libraryproject.Book;
+package deltasource.eu.libraryproject.book;
 
 public enum BookGenre {
     ROCK,

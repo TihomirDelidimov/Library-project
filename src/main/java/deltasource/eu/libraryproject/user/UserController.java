@@ -1,6 +1,6 @@
-package deltasource.eu.libraryproject.User;
+package deltasource.eu.libraryproject.user;
 
-import deltasource.eu.libraryproject.Person.Gender;
+import deltasource.eu.libraryproject.person.Gender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,4 +1,4 @@
-package deltasource.eu.libraryproject.CommonExceptions;
+package deltasource.eu.libraryproject.commonexception;
 
 public class CommonValidationException extends RuntimeException {
 

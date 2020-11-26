@@ -1,4 +1,4 @@
-package deltasource.eu.libraryproject.Author;
+package deltasource.eu.libraryproject.author;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

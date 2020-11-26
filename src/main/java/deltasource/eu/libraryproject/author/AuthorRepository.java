@@ -1,4 +1,4 @@
-package deltasource.eu.libraryproject.Author;
+package deltasource.eu.libraryproject.author;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

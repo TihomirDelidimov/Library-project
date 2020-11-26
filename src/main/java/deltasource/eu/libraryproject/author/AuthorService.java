@@ -1,6 +1,4 @@
-package deltasource.eu.libraryproject.Author;
-
-import org.springframework.data.jpa.repository.JpaRepository;
+package deltasource.eu.libraryproject.author;
 
 import java.util.List;
 

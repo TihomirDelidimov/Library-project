@@ -1,6 +1,9 @@
-package deltasource.eu.libraryproject.Person;
+package deltasource.eu.libraryproject.person;
 
-import deltasource.eu.libraryproject.CommonExceptions.CommonValidationException;
+import deltasource.eu.libraryproject.commonexception.CommonValidationException;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.EnumType;
@@ -8,6 +11,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
+@Getter @Setter @NoArgsConstructor
 public abstract class Person {
 
     @Column(length = 32, nullable = false)
@@ -17,38 +21,10 @@ public abstract class Person {
     @Enumerated(EnumType.STRING)
     protected Gender gender;
 
-    public Person() {
-
-    }
-
     public Person(String firstName, String lastName, Gender gender) {
         personValidator(firstName,lastName,gender);
         this.firstName = firstName;
         this.lastName = lastName;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public Gender getGender() {
-        return gender;
-    }
-
-    public void setGender(Gender gender) {
-        this.gender = gender;
     }
 
     private void personValidator(String firstName, String lastName, Gender gender) {

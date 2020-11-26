@@ -1,4 +1,4 @@
-package deltasource.eu.libraryproject.User;
+package deltasource.eu.libraryproject.user;
 
 import java.util.List;
 
