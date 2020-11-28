@@ -1,19 +1,21 @@
 package deltasource.eu.libraryproject.book.ebook;
 
 import deltasource.eu.libraryproject.book.Book;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import deltasource.eu.libraryproject.book.IsbnConstraint;
+import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.net.URL;
 
-@Getter @Setter @AllArgsConstructor
 @Entity
+@Getter @Setter @NoArgsConstructor
 public class EBook extends Book {
-    @Id
-    Integer id;
-    URL downloadUrl;
-    URL readUrl;
+
+    private URL downloadUrl;
+    @NotNull
+    private URL readUrl;
+    @NotNull @NotBlank @IsbnConstraint
+    private String isbn;
 }

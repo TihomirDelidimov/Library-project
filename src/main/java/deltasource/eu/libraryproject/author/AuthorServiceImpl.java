@@ -22,7 +22,7 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public Author getAuthor(Integer id) throws Exception {
+    public Author getAuthor(Long id) throws Exception {
         return authorRepository.findById(id).orElseThrow(
                 ()-> new Exception(id + " user doesn't exist!")
         );

@@ -1,37 +1,40 @@
 package deltasource.eu.libraryproject.user;
-import deltasource.eu.libraryproject.person.Gender;
+
 import deltasource.eu.libraryproject.person.Person;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 
 @Entity
-@Getter @Setter @NoArgsConstructor
+@Getter
+@Setter
+@NoArgsConstructor
 public class User extends Person {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    private Integer id;
-    @Column(length = 32, nullable = false, unique = true)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(updatable = false, nullable = false)
+    private Long id;
+    @NotNull
+    @NotBlank
+    @Size(min = 2, max = 32, message = "Username must should be between 2 and 32 symbols!")
+    @Column(unique = true)
     private String username;
-    @Column(length = 32, nullable = false)
+    @NotNull
+    @NotBlank
+    @Size(min = 2, max = 32, message = "Password must should be between 2 and 32 symbols!")
     private String password;
-    @Column(length = 64, nullable = false)
+    @NotNull
+    @NotBlank
+    @Size(min = 2, max = 128, message = "Address must should be between 2 and 128 symbols!")
     private String address;
-    @Column(length = 64, nullable = false)
+    @NotNull
+    @NotBlank
+    @Email
     private String email;
-    @Column(nullable = false)
-    private boolean isGDPRConsent;
-
-    public User(String firstName, String lastName, String username, String password, Gender gender,
-                String address, String email, int age, boolean isGDPRConsent) {
-        super(firstName,lastName,gender);
-        this.username = username;
-        this.password = password;
-        this.address = address;
-        this.email = email;
-        this.isGDPRConsent = isGDPRConsent;
-    }
+    @NotNull
+    private Boolean isGdprConsent;
 }

@@ -5,5 +5,5 @@ import java.util.List;
 public interface AuthorService {
     public abstract Author saveAuthor(Author author);
     public abstract List<Author> getAllAuthor();
-    public abstract Author getAuthor(Integer id) throws Exception;
+    public abstract Author getAuthor(Long id) throws Exception;
 }
