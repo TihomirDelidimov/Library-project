@@ -10,12 +10,17 @@ import javax.validation.constraints.NotNull;
 import java.net.URL;
 
 @Entity
-@Getter @Setter @NoArgsConstructor
+@Getter
+@Setter
+@NoArgsConstructor
 public class EBook extends Book {
 
     private URL downloadUrl;
     @NotNull
     private URL readUrl;
-    @NotNull @NotBlank @IsbnConstraint
+    @NotNull
+    @NotBlank
+    @IsbnConstraint
+    @Column(unique = true)
     private String isbn;
 }
