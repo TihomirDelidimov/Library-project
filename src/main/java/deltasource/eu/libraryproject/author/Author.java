@@ -1,7 +1,6 @@
 package deltasource.eu.libraryproject.author;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
@@ -24,10 +23,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Getter @Setter @NoArgsConstructor
+@Getter
+@Setter
+@NoArgsConstructor
 public class Author extends Person {
 
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false, nullable = false)
     private Long id;
     @NotNull
@@ -41,14 +43,16 @@ public class Author extends Person {
     @Setter(AccessLevel.NONE)
     private LocalDate dateOfDeath;
     @ManyToMany(mappedBy = "authors", cascade = CascadeType.PERSIST)
+    @JsonIgnore
     private Set<Book> books = new HashSet<>();
 
     /**
      * If the date of death of the author is before the birth date, exception is thrown.
+     *
      * @param dateOfDeath
      */
     public void setDateOfDeath(LocalDate dateOfDeath) {
-        if(dateOfDeath == null || dateOfDeath.isBefore(dateOfBirth)) {
+        if (dateOfDeath == null || dateOfDeath.isBefore(dateOfBirth)) {
             throw new IllegalArgumentException("Author date of death is not set correctly!");
         }
         this.dateOfDeath = dateOfDeath;

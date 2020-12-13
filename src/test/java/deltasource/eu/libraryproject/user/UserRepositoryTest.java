@@ -1,6 +1,7 @@
 package deltasource.eu.libraryproject.user;
 
 import deltasource.eu.libraryproject.person.Gender;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,16 +16,16 @@ import javax.persistence.PersistenceContext;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-@ActiveProfiles("test")
+@TestPropertySource(locations = "classpath:testdb.properties")
 public class UserRepositoryTest {
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @PersistenceContext
-    EntityManager entityManager;
+    private EntityManager entityManager;
 
-    User user;
+    private User user;
     @BeforeEach
     private void initializeUser() {
         user = new User();
@@ -78,7 +79,7 @@ public class UserRepositoryTest {
     }
 
     @Test
-    public void setUserRepository_getUserByUsernameEM_OK () {
+    public void userRepository_getUserByUsernameEM_OK () {
         //given
         userRepository.save(user);
 

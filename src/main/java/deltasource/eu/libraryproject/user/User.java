@@ -15,7 +15,7 @@ import javax.validation.constraints.*;
 public class User extends Person {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false, nullable = false)
     private Long id;
     @NotNull
@@ -34,6 +34,7 @@ public class User extends Person {
     @NotNull
     @NotBlank
     @Email
+    @Column(unique = true)
     private String email;
     @NotNull
     private Boolean isGdprConsent;

@@ -1,9 +1,12 @@
 package deltasource.eu.libraryproject.book;
 
+import org.springframework.stereotype.Component;
+
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-public class ISBNValidator implements ConstraintValidator<IsbnConstraint, String> {
+@Component
+public class IsbnValidator implements ConstraintValidator<IsbnConstraint, String> {
 
     @Override
     public void initialize(IsbnConstraint constraintAnnotation) {
@@ -16,7 +19,7 @@ public class ISBNValidator implements ConstraintValidator<IsbnConstraint, String
         }
         isbn = isbn.replaceAll("-", "");
         if (isbn.length() == 10) {
-            return true;
+            return validateIsbn10(isbn);
         } else if (isbn.length() == 13) {
             return validateIsbn13(isbn);
         } else {
@@ -42,7 +45,7 @@ public class ISBNValidator implements ConstraintValidator<IsbnConstraint, String
         }
     }
 
-    public boolean validateIsbn10( String isbn ) {
+    private boolean validateIsbn10( String isbn ) {
         try {
             int sum = 0;
             for ( int i = 0; i < 9; i++ ) {

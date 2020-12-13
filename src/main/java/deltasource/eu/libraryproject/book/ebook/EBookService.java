@@ -7,5 +7,5 @@ import java.util.List;
 public interface EBookService {
     public abstract EBook saveBook(EBook book);
     public abstract List<EBook> getAllBooks();
-    public abstract EBook getBook(Long id) throws Exception;
+    public abstract EBook getBook(Long id);
 }

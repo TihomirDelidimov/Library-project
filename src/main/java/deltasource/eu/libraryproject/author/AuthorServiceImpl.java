@@ -1,5 +1,6 @@
 package deltasource.eu.libraryproject.author;
 
+import deltasource.eu.libraryproject.book.paperbook.PaperBook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,14 +18,19 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public List<Author> getAllAuthor() {
+    public List<Author> getAllAuthors() {
         return authorRepository.findAll();
     }
 
     @Override
-    public Author getAuthor(Long id) throws Exception {
-        return authorRepository.findById(id).orElseThrow(
-                ()-> new Exception(id + " user doesn't exist!")
-        );
+    public Author getAuthor(Long id) {
+        Author author = null;
+        try {
+            author = authorRepository.findById(id).orElseThrow(
+                    () -> new Exception(id + " author doesn't exist!"));
+        } catch (Exception ex) {
+            return null;
+        }
+        return author;
     }
 }

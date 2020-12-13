@@ -17,10 +17,15 @@ public class EBookServiceImpl implements EBookService {
     }
 
     @Override
-    public EBook getBook(Long id) throws Exception {
-        return eBookRepository.findById(id).orElseThrow(
-                ()-> new Exception(id + " book doesn't exist!")
-        );
+    public EBook getBook(Long id) {
+        EBook eBook = null;
+        try {
+            eBook = eBookRepository.findById(id).orElseThrow(
+                    () -> new Exception(id + " book doesn't exist!"));
+        } catch (Exception ex) {
+            return null;
+        }
+        return eBook;
     }
 
     @Override

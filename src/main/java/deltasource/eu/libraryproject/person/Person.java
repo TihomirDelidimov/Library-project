@@ -18,7 +18,6 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 public abstract class Person {
 
-
     @NotNull(message = "First name is required")
     @NotBlank(message = "First name is required")
     @Size(min = 2, max = 40, message = "First name should be between 2 and 40 symbols")
